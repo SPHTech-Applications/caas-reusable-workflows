@@ -14,10 +14,17 @@ jobs:
     with:
       workflow: <workflow-file-to-trigger-in-another-repo>
       repo: <repo-to-be triggered>
+<<<<<<< Updated upstream
       token: <github-token-write-access-repo>
       ref: <branch-or-tag-sha-to-execute>
+=======
+      branch-ref: <branch-or-tag-sha-to-execute>
+>>>>>>> Stashed changes
       inputs: <input-json-to-pass>
       wait-for-completion: <true|false>
+    secrets:
+      app_id: <app-id>
+      app_secret:  <app-secret>
 
   workflow-get-status:
       name: Workflow get status
