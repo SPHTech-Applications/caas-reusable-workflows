@@ -14,7 +14,6 @@ jobs:
     with:
       workflow: <workflow-file-to-trigger-in-another-repo>
       repo: <repo-to-be triggered>
-      environment: <environment-where-secrets-stored>
       branch-ref: <branch-or-tag-sha-to-execute>
       inputs: <input-json-to-pass>
       wait-for-completion: <true|false>
