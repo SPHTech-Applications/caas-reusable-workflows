@@ -11,10 +11,6 @@ on:
         description: The repo that needed to be triggered
         type: string
         required: true
-      token:
-        description: A GitHub access token with write access to the repo in question.
-        type: string
-        required: true
       inputs:
         description: The inputs to pass to the workflow this must be a JSON encoded string
         type: string
@@ -35,6 +31,13 @@ on:
         type: string
         default: ubuntu-latest
         required: false
+    secrets:
+      app_id:
+        description: Passing App id for the GHA Token creation
+        required: true
+      app_secret:
+        description: Passing App secret for the GHA Token creation
+        required: true
     outputs:
         workflow_status:
           description: Get the status of the workflow
@@ -48,6 +51,13 @@ jobs:
       contents: read
       id-token: write
     steps:
+      - name: Creating the GHA Token
+        id: generate_gha_token
+        uses: tibdex/github-app-token@v2
+        with:
+          app_id: ${{ secrets.app_id }}
+          private_key: ${{ secrets.app_secret }}
+
       - name: ⚙️ Workflow dispatch wait for completion
         id: workflow_dispatch
         uses: aurelien-baudet/workflow-dispatch@v2.1.1
@@ -55,7 +65,7 @@ jobs:
           workflow: ${{ inputs.workflow }}
           ref: ${{ inputs.branch-ref }}
           repo: ${{ inputs.repo }}
-          token: ${{ inputs.token }}
+          token: ${{ steps.generate_gha_token.outputs.token }}
           inputs:  ${{ inputs.inputs }}
           wait-for-completion: ${{ inputs.wait-for-completion }}
 
