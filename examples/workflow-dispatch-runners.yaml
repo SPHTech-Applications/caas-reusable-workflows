@@ -25,5 +25,3 @@ jobs:
       id: workflow-gets-status
       run: |
         echo "Workflow execution status: ${{ jobs.workflow-dispatch-jobs.outputs.workflow_status }}"
-
-

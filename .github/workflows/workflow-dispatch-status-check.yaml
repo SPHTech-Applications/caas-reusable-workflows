@@ -65,6 +65,3 @@ jobs:
         run: |
           echo "Another Workflow conclusion: ${{ steps.workflow_dispatch.outputs.workflow-conclusion }}"
           echo "status=${{ steps.workflow_dispatch.outputs.workflow-conclusion }}" >> $GITHUB_OUTPUT
-
-
-
