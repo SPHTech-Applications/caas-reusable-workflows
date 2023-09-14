@@ -76,7 +76,7 @@ jobs:
           inputs:  ${{ inputs.inputs }}
           wait-for-completion: ${{ inputs.wait-for-completion }}
 
-      - name: 🚀Get the status output of the workflow dispatch
+      - name: 🚀 Get the status output of the workflow dispatch
         if: always()
         id: check_workflow_dispatch_status
         run: |
