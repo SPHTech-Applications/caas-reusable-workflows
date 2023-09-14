@@ -1,0 +1,67 @@
+name: 'Workflow Dispatch, wait and status check'
+
+on:
+  workflow_call:
+    inputs:
+      workflow:
+        description: The name or the filename or ID of the workflow to trigger and run.
+        type: string
+        required: true
+      repo:
+        description: The repo that needed to be triggered
+        type: string
+        required: true
+      token:
+        description: A GitHub access token with write access to the repo in question.
+        type: string
+        required: true
+      inputs:
+        description: The inputs to pass to the workflow this must be a JSON encoded string
+        type: string
+        default: '{}'
+        required: false
+      branch-ref:
+        description: Git reference used with the triggered workflow run. The reference can be a branch, tag, or a commit SHA. Default it will look into Github push reference
+        type: string
+        default: ${{ github.event.push.ref }}
+        required: false
+      wait-for-completion:
+        description:  If true, this action will actively poll the workflow run to get the result of the triggered workflow. It is enabled by default.
+        type: boolean
+        default: true
+        required: false
+      hosted-machine:
+        description: Type of machine to run the job on
+        type: string
+        default: ubuntu-latest
+        required: false
+    outputs:
+        workflow_status:
+          description: Get the status of the workflow
+          value: ${{ jobs.check_workflow_dispatch_status.outputs.status }}
+
+jobs:
+  workflow-dispatch-wait:
+    name: 🚀 Workflow Dispatch
+    runs-on: ${{ inputs.hosted-machine }}
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: ⚙️ Workflow dispatch wait for completion
+        id: workflow_dispatch
+        uses: aurelien-baudet/workflow-dispatch@v2.1.1
+        with:
+          workflow: ${{ inputs.workflow }}
+          ref: ${{ inputs.branch-ref }}
+          repo: ${{ inputs.repo }}
+          token: ${{ inputs.token }}
+          inputs:  ${{ inputs.inputs }}
+          wait-for-completion: ${{ inputs.wait-for-completion }}
+
+      - name: 🚀Get the status output of the workflow dispatch
+        if: always()
+        id: check_workflow_dispatch_status
+        run: |
+          echo "Another Workflow conclusion: ${{ steps.workflow_dispatch.outputs.workflow-conclusion }}"
+          echo "status=${{ steps.workflow_dispatch.outputs.workflow-conclusion }}" >> $GITHUB_OUTPUT

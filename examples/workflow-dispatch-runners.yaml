@@ -1,0 +1,27 @@
+name: workflow-dispatch-runners
+on:
+  pull_request:
+    branches:
+      - dev
+  push:
+    branches:
+      - dev
+
+jobs:
+  workflow-dispatch-jobs:
+    name: Workflow dispatch jobs and get the status
+    uses: SPHTech-Applications/caas-reusable-workflows/.github/workflows/workflow-dispatch-status-check.yaml@main
+    with:
+      workflow: <workflow-file-to-trigger-in-another-repo>
+      repo: <repo-to-be triggered>
+      token: <github-token-write-access-repo>
+      ref: <branch-or-tag-sha-to-execute>
+      inputs: <input-json-to-pass>
+      wait-for-completion: <true|false>
+
+  workflow-get-status:
+      name: Workflow get status
+      needs: workflow-dispatch-jobs
+      id: workflow-gets-status
+      run: |
+        echo "Workflow execution status: ${{ jobs.workflow-dispatch-jobs.outputs.workflow_status }}"
