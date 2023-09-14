@@ -11,6 +11,10 @@ on:
         description: The repo that needed to be triggered
         type: string
         required: true
+      environment:
+        description: Environment where the tokens are stored
+        type: string
+        required: true
       inputs:
         description: The inputs to pass to the workflow this must be a JSON encoded string
         type: string
@@ -47,6 +51,7 @@ jobs:
   workflow-dispatch-wait:
     name: 🚀 Workflow Dispatch
     runs-on: ${{ inputs.hosted-machine }}
+    environment: ${{ inputs.environment }}
     permissions:
       contents: read
       id-token: write
