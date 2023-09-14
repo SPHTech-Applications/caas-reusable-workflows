@@ -41,7 +41,7 @@ on:
     outputs:
         workflow_status:
           description: Get the status of the workflow
-          value: ${{ jobs.check_workflow_dispatch_status.outputs.status }}
+          value: ${{ jobs.workflow-dispatch-wait.outputs.status }}
 
 jobs:
   workflow-dispatch-wait:
@@ -50,6 +50,8 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    outputs:
+      status: ${{ steps.check_workflow_dispatch_status.outputs.status }}
     steps:
       - name: Creating the GHA Token
         id: generate_gha_token
