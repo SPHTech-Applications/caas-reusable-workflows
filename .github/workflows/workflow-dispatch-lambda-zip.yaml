@@ -1,0 +1,101 @@
+name: 🚀 Deploy Lambda with Zip
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "src/**"
+      - "!package.json"
+      - "!package-lock.json"
+      - ".github/workflows/**"
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to deploy to stg & prd"
+        required: true
+        default: "dev" # valid: 'dev', 'stg', 'prd
+        type: choice
+        options:
+          - "dev"
+          - "stg"
+          - "prd"
+      platform:
+        description: "Platform to run on"
+        required: false
+        default: "ubuntu-latest"
+        type: choice
+        options:
+            - "ubuntu-latest"
+            - "linux/arm64"
+      additionalInstallOptions:
+        description: "Additional options for npm install"
+        required: false
+        default: "" # Set your default additional options here
+        type: string
+      functionName:
+        description: "Name of the Lambda function to update"
+        required: true
+        type: string
+
+jobs:
+  deploy_zip:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform:
+          - ${{ github.event.inputs.platform }}
+
+    steps:
+      - name: Debug environment
+        run: |
+          echo "variables: ${{ toJSON(vars)}}"
+          echo "env: ${{ inputs.env }}"
+
+      - name: ⏳ Checkout
+        uses: actions/checkout@v2 # Update to the latest version of actions/checkout
+
+      - name: 🔋 Setup Node.js
+        uses: actions/setup-node@v2 # Update to the latest version of actions/setup-node
+        with:
+          node-version: ${{ env.NODE_VERSION }} # Set the Node.js version from the environment
+          node-version-file: ".nvmrc" # Use .nvmrc file if available
+
+      - name: 📥 Install dependencies (all)
+        env:
+          HUSKY: 0
+        run: |
+          npm ci --ignore-scripts
+          npm install --ignore-scripts ${{ inputs.additionalInstallOptions }}
+
+      - name: 🛠️ Build lambda
+        run: npm run build
+
+      - name: 📥 Install dependencies (production)
+        env:
+          HUSKY: 0
+        run: |
+          rm -rf node_modules
+          npm ci --omit=dev --ignore-scripts
+          rm -rf node_modules/sharp
+          npm install --omit=dev --ignore-scripts
+
+      - name: 🔩 Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1 # Update to v1
+        with:
+            role-skip-session-tagging: true
+            role-to-assume: ${{ vars.AWS_IAM_ARN }}
+            role-session-name: gh-actions
+            aws-region: ap-southeast-1
+
+      - name: 📦 Zip package to upload
+        run: |
+          cd dist && zip -r ../lambda.zip .
+          cd .. && zip -r lambda.zip ./node_modules
+          zip -r lambda.zip ./package.json
+
+      - name: 🚀 Deploy lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name ${{ inputs.functionName }}-${{ inputs.env }} \
+            --zip-file fileb://lambda.zip
