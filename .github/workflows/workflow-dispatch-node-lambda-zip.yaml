@@ -7,10 +7,12 @@ on:
         description: "Environment to deploy to stg & prd"
         required: true
         default: "dev" # valid: 'dev', 'stg', 'prd
+        type: string
       platform:
         description: "Platform to run on"
         required: false
         default: "ubuntu-latest"
+        type: string
       additionalInstallOptions:
         description: "Additional options for npm install"
         required: false
