@@ -58,8 +58,8 @@ jobs:
       - name: 🔋 Setup Node.js
         uses: actions/setup-node@v2 # Update to the latest version of actions/setup-node
         with:
-          node-version: ${{ env.NODE_VERSION }} # Set the Node.js version from the environment
           node-version-file: ".nvmrc" # Use .nvmrc file if available
+          node-version: ${{ env.NODE_VERSION || '18' }} # Set the Node.js version from the environment, default 1
 
       - name: 📥 Install dependencies (all)
         env:
