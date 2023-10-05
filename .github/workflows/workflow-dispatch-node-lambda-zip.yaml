@@ -1,10 +1,7 @@
 name: 🚀 Deploy Lambda with Zip
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+  workflow_call:
     inputs:
       environment:
         description: "Environment to deploy to stg & prd"
