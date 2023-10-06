@@ -6,7 +6,6 @@ on:
       environment:
         description: "Environment to deploy to stg & prd"
         required: true
-        default: "dev" # valid: 'dev', 'stg', 'prd
         type: string
       platform:
         description: "Platform to run on"
@@ -46,7 +45,7 @@ jobs:
       - name: Debug environment
         run: |
           echo "variables: ${{ toJSON(vars)}}"
-          echo "env: ${{ inputs.env }}"
+          echo "env: ${{ inputs.environment }}"
 
       - name: ⏳ Checkout
         uses: actions/checkout@v3
@@ -75,7 +74,7 @@ jobs:
           npm install --omit=dev --ignore-scripts
 
       - name: 🔩 Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
             role-skip-session-tagging: true
             role-to-assume: ${{ inputs.awsIamArn }}
@@ -91,5 +90,5 @@ jobs:
       - name: 🚀 Deploy lambda
         run: |
           aws lambda update-function-code \
-            --function-name ${{ inputs.functionName }}-${{ inputs.env }} \
+            --function-name ${{ inputs.functionName }}-${{ inputs.environment }} \
             --zip-file fileb://lambda.zip
