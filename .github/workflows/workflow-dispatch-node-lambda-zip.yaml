@@ -22,6 +22,11 @@ on:
         description: "Name of the Lambda function to update"
         required: true
         type: string
+      nodeVersionFile: # Add this input
+        description: "Path to the .nvmrc file for Node.js version"
+        required: false
+        default: ".nvmrc"
+        type: string
 
 jobs:
   deploy_zip:
@@ -43,8 +48,8 @@ jobs:
       - name: 🔋 Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version-file: ".nvmrc" # Use .nvmrc file if available
-          node-version: ${{ env.NODE_VERSION || '18' }} # Set the Node.js version from the environment, default 1
+          node-version-file: ${{ inputs.nodeVersionFile }}
+          node-version: ${{ env.NODE_VERSION || '18' }}
 
       - name: 📥 Install dependencies (all)
         env:
