@@ -44,7 +44,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: ".nvmrc" # Use .nvmrc file if available
-          node-version: ${{ NODE_VERSION || '18' }} # Set the Node.js version from the environment, default 1
+          node-version: ${{ env.NODE_VERSION || '18' }} # Set the Node.js version from the environment, default 1
 
       - name: 📥 Install dependencies (all)
         env:
