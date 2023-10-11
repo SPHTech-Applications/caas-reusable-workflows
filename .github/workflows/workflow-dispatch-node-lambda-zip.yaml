@@ -72,9 +72,7 @@ jobs:
         env:
           HUSKY: 0
         run: |
-          rm -rf node_modules
           npm ci --omit=dev --ignore-scripts
-          npm install --omit=dev --ignore-scripts
 
       - name: 🔩 Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
