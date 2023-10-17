@@ -52,6 +52,7 @@ jobs:
     name: 🚀 Workflow Dispatch
     runs-on: ${{ inputs.hosted-machine }}
     environment: ${{ inputs.environment }}
+    if: inputs.environment != ''
     permissions:
       contents: read
       id-token: write
@@ -82,3 +83,15 @@ jobs:
         run: |
           echo "Another Workflow conclusion: ${{ steps.workflow_dispatch.outputs.workflow-conclusion }}"
           echo "status=${{ steps.workflow_dispatch.outputs.workflow-conclusion }}" >> $GITHUB_OUTPUT
+
+      - name: Send slack notification on failure
+        if: always()
+        uses: ravsamhq/notify-slack-action@v2
+        with:
+          status: ${{ job.status }}
+          notify_when: 'failure'
+          notification_title: "{workflow} has {status_message}"
+          message_format: "{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}>"
+          mention_groups_when: 'failure'
+        env:
+          SLACK_WEBHOOK_URL: tech-alert-caas-e2e-failure-${{ inputs.environment }}
