@@ -85,13 +85,13 @@ jobs:
           echo "status=${{ steps.workflow_dispatch.outputs.workflow-conclusion }}" >> $GITHUB_OUTPUT
 
       - name: Send slack notification on failure
-        if: always()
         uses: ravsamhq/notify-slack-action@v2
+        if: always() && contains(fromJson('["failure", "cancelled", "timed_out]'), steps.workflow_dispatch.outputs.workflow-conclusion)
         with:
           status: ${{ job.status }}
           notify_when: 'failure'
-          notification_title: "{workflow} has {status_message}"
-          message_format: "{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}>"
+          notification_title: "{workflow} has {steps.workflow_dispatch.outputs.workflow-conclusion}"
+          message_format: "{emoji} *{workflow}* {steps.workflow_dispatch.outputs.workflow-conclusion} triggered from "
           mention_groups_when: 'failure'
         env:
-          SLACK_WEBHOOK_URL: tech-alert-caas-e2e-failure-${{ inputs.environment }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
