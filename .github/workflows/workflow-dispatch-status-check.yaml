@@ -86,7 +86,8 @@ jobs:
 
       - name: Send slack notification on failure
         uses: ravsamhq/notify-slack-action@v2
-        if: always() && contains(fromJson('["failure", "cancelled", "timed_out]'), steps.workflow_dispatch.outputs.workflow-conclusion)
+#        if: always() && contains(fromJson('["failure", "cancelled", "timed_out]'), steps.workflow_dispatch.outputs.workflow-conclusion)
+        if: always()
         with:
           status: ${{ job.status }}
           token: ${{ secrets.GITHUB_TOKEN }}
