@@ -89,9 +89,10 @@ jobs:
         if: always() && contains(fromJson('["failure", "cancelled", "timed_out]'), steps.workflow_dispatch.outputs.workflow-conclusion)
         with:
           status: ${{ job.status }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           notify_when: 'failure'
-          notification_title: "{workflow} has ${{ steps.workflow_dispatch.outputs.workflow-conclusion }}"
-          message_format: "{emoji} *{workflow}* ${{ steps.workflow_dispatch.outputs.workflow-conclusion }} triggered from ${{fromJson(inputs.inputs).source}}"
+#          notification_title: "{workflow} has ${{ steps.workflow_dispatch.outputs.workflow-conclusion }}"
+#          message_format: "{emoji} *{workflow}* ${{ steps.workflow_dispatch.outputs.workflow-conclusion }} triggered from ${{fromJson(inputs.inputs).source}}"
           mention_groups_when: 'failure'
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
