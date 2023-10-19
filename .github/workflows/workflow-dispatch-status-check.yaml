@@ -42,6 +42,9 @@ on:
       app_secret:
         description: Passing App secret for the GHA Token creation
         required: true
+      slack_failure_webhook_url:
+        description: Slack Webhook URL to send failure notifications
+        required: true
     outputs:
         workflow_status:
           description: Get the status of the workflow
@@ -96,4 +99,4 @@ jobs:
 #          message_format: "{emoji} *{workflow}* ${{ steps.workflow_dispatch.outputs.workflow-conclusion }} triggered from ${{fromJson(inputs.inputs).source}}"
           mention_groups_when: 'failure'
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.slack_failure_webhook_url }}
