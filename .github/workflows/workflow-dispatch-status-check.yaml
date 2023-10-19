@@ -89,14 +89,15 @@ jobs:
 
       - name: Send slack notification on failure
         uses: ravsamhq/notify-slack-action@v2
-#        if: always() && contains(fromJson('["failure", "cancelled", "timed_out]'), steps.workflow_dispatch.outputs.workflow-conclusion)
-        if: always()
+        if: ${{ always() && contains(fromJson('["failure", "cancelled", "timed_out"]'), steps.workflow_dispatch.outputs.workflow-conclusion) }}
         with:
           status: ${{ job.status }}
           token: ${{ secrets.GITHUB_TOKEN }}
           notify_when: 'failure'
+          footer: "Linked Repo <{repo_url}|{repo}>"
+          message_format: "{emoji} *{workflow}* ${{steps.workflow_dispatch.outputs.workflow-conclusion}} in <{repo_url}|{repo}>"
 #          notification_title: "{workflow} has ${{ steps.workflow_dispatch.outputs.workflow-conclusion }}"
-#          message_format: "{emoji} *{workflow}* ${{ steps.workflow_dispatch.outputs.workflow-conclusion }} triggered from ${{fromJson(inputs.inputs).source}}"
+#          message_format: "{emoji} *{workflow}* triggered from ${{fromJson(inputs.inputs).source}}"
           mention_groups_when: 'failure'
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.slack_failure_webhook_url }}
