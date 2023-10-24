@@ -95,7 +95,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           notify_when: 'failure'
           footer: "Linked Repo <{repo_url}|{repo}>"
-          message_format: "{emoji} *{workflow}* ${{ steps.workflow_dispatch.outputs.workflow-conclusion == '' && 'failure || steps.workflow_dispatch.outputs.workflow-conclusion  }} in <{repo_url}|{repo}>"
+          message_format: "{emoji} *{workflow}* ${{ steps.workflow_dispatch.outputs.workflow-conclusion == '' && 'failure' || steps.workflow_dispatch.outputs.workflow-conclusion  }} in <{repo_url}|{repo}>"
           notification_title: "{workflow} has ${{ steps.workflow_dispatch.outputs.workflow-conclusion == '' && 'failure || steps.workflow_dispatch.outputs.workflow-conclusion  }}"
           mention_groups_when: 'failure'
         env:
