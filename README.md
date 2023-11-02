@@ -41,8 +41,9 @@ Permissible inputs:
      - "linux/arm64"
    default: ubuntu-latest
    
-Reference: [https://github.com/marketplace/actions/workflow-dispatch-and-wait](https://github.com/marketplace/actions/workflow-dispatch-and-wait)
+
 ```
+**Reference:** [https://github.com/marketplace/actions/workflow-dispatch-and-wait](https://github.com/marketplace/actions/workflow-dispatch-and-wait)
 
 8. ***.github/workflows/workflow-dispatch-node-lambda-zip.yaml*** : This reusable workflow is used to dispatch a remote or local repository , deploy nodejs applications to AWS Lambda as specified in the inputs.
 ```
