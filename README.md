@@ -54,6 +54,9 @@ Permissible secrets:
    slack webhook url in order to send failure notification for the workflow dispatch
 
 ```
+
+Slack Notification woll be sent whenever there is a "failure", "cancelled", "timed_out" event from dispatched workflow to the webhook url defined in the secrets parameter :  _slack_failure_webhook_url_
+
 **Reference:** [https://github.com/marketplace/actions/workflow-dispatch-and-wait](https://github.com/marketplace/actions/workflow-dispatch-and-wait)
 
 8. ***.github/workflows/workflow-dispatch-node-lambda-zip.yaml*** : This reusable workflow is used to dispatch a remote or local repository , deploy nodejs applications to AWS Lambda as specified in the inputs.
