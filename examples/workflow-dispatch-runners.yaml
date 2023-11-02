@@ -21,6 +21,7 @@ jobs:
     secrets:
       app_id: <app-id>
       app_secret:  <app-secret>
+      slack_failure_webhook_url: <slack-notification-webhook-to-send-failure-notification>
 
   workflow-get-status:
       name: Workflow get status
