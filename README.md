@@ -40,7 +40,18 @@ Permissible inputs:
      - "ubuntu-latest"
      - "linux/arm64"
    default: ubuntu-latest
-   
+
+
+Permissible secrets:
+
+1. app_id
+   app id that need to be sent from the client to get the GH token
+
+2. app_secret
+   app secret that need to be sent from the client to get the GH token
+
+3. slack_failure_webhook_url
+   slack webhook url in order to send failure notification for the workflow dispatch
 
 ```
 **Reference:** [https://github.com/marketplace/actions/workflow-dispatch-and-wait](https://github.com/marketplace/actions/workflow-dispatch-and-wait)
