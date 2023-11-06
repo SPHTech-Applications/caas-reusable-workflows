@@ -31,6 +31,11 @@ on:
         required: false
         default: ""
         type: string
+      commitGithubSHA:
+        description: "Github SHA of target commit on the target repo and branch"
+        required: false
+        default: ""
+        type: string
     secrets:
       SENTRY_AUTH_TOKEN:
         description: "Sentry auth token"
