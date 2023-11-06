@@ -106,8 +106,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           notify_when: 'failure,cancelled,warnings,skipped'
           footer: "<{run_url}|View Run> | Linked Repo <{repo_url}|{repo}>"
-          message_format: "{emoji} *{workflow}* {status_message} ${{ steps.workflow_dispatch.outputs.workflow-conclusion == '' && failure || steps.workflow_dispatch.outputs.workflow-conclusion  }} in <{repo_url}|{repo}@{branch}> on <{commit_url}|{commit_sha}>"
-          notification_title: "{workflow} file has ${{ steps.workflow_dispatch.outputs.workflow-conclusion == '' && failure || steps.workflow_dispatch.outputs.workflow-conclusion  }} ${{ github.event.head_commit.message }} ( ${{ github.event.head_commit.author.name }} )"
+          message_format: "{emoji} *{workflow}* {status_message} ${{ steps.workflow_dispatch.outputs.workflow-conclusion == '' && 'failure' || steps.workflow_dispatch.outputs.workflow-conclusion  }} in <{repo_url}|{repo}@{branch}> on <{commit_url}|{commit_sha}>"
+          notification_title: "{workflow} file has ${{ steps.workflow_dispatch.outputs.workflow-conclusion == '' && 'failure' || steps.workflow_dispatch.outputs.workflow-conclusion  }} ${{ github.event.head_commit.message }} ( ${{ github.event.head_commit.author.name }} )"
           mention_groups_when: 'failure,warnings'
           mention_users_when: 'failure,warnings'
         env:
