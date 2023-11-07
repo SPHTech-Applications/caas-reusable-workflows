@@ -85,6 +85,7 @@ jobs:
           HUSKY: 0
         run: |
           rm -rf node_modules
+          npm pkg set scripts.prepare="node -e \"if (process.env.NODE_ENV !== 'production') { require('husky').install() }\""
           npm ci --omit=dev
 
       - name: 🔩 Configure AWS Credentials
