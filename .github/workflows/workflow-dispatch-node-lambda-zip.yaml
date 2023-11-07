@@ -84,6 +84,7 @@ jobs:
         env:
           HUSKY: 0
         run: |
+          rm -rf node_modules
           npm ci --omit=dev
 
       - name: 🔩 Configure AWS Credentials
