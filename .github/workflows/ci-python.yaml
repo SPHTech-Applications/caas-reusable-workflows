@@ -61,12 +61,6 @@ jobs:
       - name: Install project dependencies
         run: poetry install --no-root
 
-      - name: Install pipx
-        uses: CfirTsabari/actions-pipx@v1
-
-      - name: Ruff action
-        uses: chartboost/ruff-action@v1
-
       - name: Copy the S3 Layer file to app
         run: |
           cp caas-stepfn-s3-layer-python/python/sqs_s3_storage.py app/
