@@ -1,0 +1,30 @@
+name: 🚀 Linting for Python codebase
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        description: "Python version to run the unit test"
+        required: false
+        type: string
+        default: '3.10'
+
+jobs:
+  build:
+    runs-on:
+      - self-hosted
+
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+
+      - name: Install pipx
+        uses: CfirTsabari/actions-pipx@v1
+
+      - name: Ruff action
+        uses: chartboost/ruff-action@v1

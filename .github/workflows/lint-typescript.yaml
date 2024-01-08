@@ -1,0 +1,28 @@
+name: 🚀 Linting for Typescript codebase
+
+on:
+  workflow_call:
+    inputs:
+      npm-extra-deps:
+        description: "Install Extra dependencies for NPM"
+        required: false
+        type: string
+        default: ""
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⏳ Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔋 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+
+      - name: 📥 Install dependencies (all)
+        run: npm ci ${{ inputs.npm-extra-deps }}
+
+      - name: 🧪 Run lint
+        run: npm run lint:ci

@@ -1,0 +1,72 @@
+name: 🚀 Unit test for Python codebase
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        description: "Python version to run the unit test"
+        required: false
+        type: string
+        default: '3.10'
+      need-s3-layer:
+        description: "Is there any S3 layer required"
+        required: false
+        type: boolean
+        default: true
+      test-file-path:
+        description: "Python file path to run the unit test"
+        required: true
+        type: string
+    secrets:
+      CAAS_E2E_APP_ID:
+        description: "CAAS E2E APP ID"
+        required: true
+      CAAS_E2E_APP_KEY:
+        description: "CAAS E2E APP KEY"
+        required: true
+
+jobs:
+  build:
+    runs-on:
+      - self-hosted
+
+    steps:
+      - name: Create GHA token
+        id: create_token
+        uses: tibdex/github-app-token@v2
+        with:
+          app_id: ${{ secrets.CAAS_E2E_APP_ID }}
+          private_key: ${{ secrets.CAAS_E2E_APP_KEY }}
+
+      - name: Checkout current repository
+        uses: actions/checkout@v4
+
+      - name: Checkout layer repository
+        uses: actions/checkout@v4
+        with:
+          repository: 'SPHTech-Applications/caas-stepfn-s3-layer-python'
+          ref: 'main'
+          token: ${{ steps.create_token.outputs.token }}
+          path: 'caas-stepfn-s3-layer-python'
+        if: inputs.need-s3-layer == true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+
+      - name: Install Poetry
+        run: curl -sSL https://install.python-poetry.org | python3 -
+
+      - name: Install project dependencies
+        run: poetry install --no-root
+
+      - name: Copy the S3 Layer file to app
+        run: |
+          cp caas-stepfn-s3-layer-python/python/sqs_s3_storage.py app/
+        if: inputs.need-s3-layer == true
+
+      - name: Run unit tests
+        run: |
+          echo $GITHUB_WORKSPACE \
+          poetry run pytest $GITHUB_WORKSPACE/${{ inputs.test-file-path }} --verbose
