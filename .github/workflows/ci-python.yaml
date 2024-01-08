@@ -13,6 +13,11 @@ on:
         required: false
         type: boolean
         default: true
+      project-directory:
+        description: "Project directory of the client"
+        required: false
+        type: string
+        default: '.'
       test-file-path:
         description: "Python file path to run the unit test"
         required: true
@@ -63,7 +68,7 @@ jobs:
 
       - name: Copy the S3 Layer file to app
         run: |
-          cp caas-stepfn-s3-layer-python/python/sqs_s3_storage.py app/
+          cp caas-stepfn-s3-layer-python/python/sqs_s3_storage.py ${{ inputs.project-directory }}
         if: inputs.need-s3-layer == true
 
       - name: Run unit tests
